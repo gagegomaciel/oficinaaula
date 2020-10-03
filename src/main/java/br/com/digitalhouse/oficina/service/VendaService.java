@@ -48,7 +48,6 @@ public class VendaService {
 		
 	}
 	 
-	
 	public Venda findById(Long id) {
 		Optional
 			.ofNullable(id)
@@ -69,4 +68,3 @@ public class VendaService {
 	}
 	
 }
-

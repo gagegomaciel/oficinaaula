@@ -6,11 +6,18 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import br.com.digitalhouse.oficina.dto.VeiculoInsertDTO;
+import br.com.digitalhouse.oficina.model.Cliente;
 import br.com.digitalhouse.oficina.model.Veiculo;
+import br.com.digitalhouse.oficina.repository.ClienteRepository;
 import br.com.digitalhouse.oficina.repository.VeiculoRepository;
+
 
 @Service
 public class VeiculoService {
+	
+	@Autowired
+	private ClienteRepository clienteRepository;
 	
 	private final VeiculoRepository veiculoRepository;
 	
@@ -20,9 +27,19 @@ public class VeiculoService {
 	}
 	
 	
-	public Veiculo create(Veiculo veiculo) {
-		veiculo.setId(null);
-		return this.veiculoRepository.save(veiculo);
+	public Veiculo create(VeiculoInsertDTO veiculoDTO) {
+//		veiculoDTO.setId(null);
+		
+		Veiculo entity = new Veiculo();
+		entity.setCor(veiculoDTO.getCor());
+		entity.setMarca(veiculoDTO.getMarca());
+		entity.setModelo(veiculoDTO.getModelo());
+		entity.setPlaca(veiculoDTO.getPlaca());
+		
+		Cliente cliente = clienteRepository.getOne(veiculoDTO.getCliente_id());
+		entity.setCliente(cliente);
+		
+		return this.veiculoRepository.save(entity);
 	}
 	
 	public Veiculo update(Veiculo novo) {
@@ -42,10 +59,10 @@ public class VeiculoService {
 	public Veiculo findById(Long id) {
 		Optional
 			.ofNullable(id)
-			.orElseThrow( () -> new RuntimeException("O id não pode ser nulo"));  // todo: criar exceção personalizada para argumento ilegal
+			.orElseThrow( () -> new RuntimeException("O id não pode ser nulo"));  
 		
 		return this.veiculoRepository.findById(id)
-				.orElseThrow( () -> new RuntimeException("Não foi possivel encontrar um objeto com id " + id)); // todo: mudar pra object not found exception
+				.orElseThrow( () -> new RuntimeException("Não foi possivel encontrar um objeto com id " + id)); 
 	}
 	
 	public List<Veiculo> findAll(){
@@ -57,27 +74,4 @@ public class VeiculoService {
 		
 		this.veiculoRepository.deleteById(id);
 	}
-	
-	
-	public List<Veiculo> findByCor(String cor) {
-		
-		return this.veiculoRepository.findAllByCor(cor);
-		
-	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 }

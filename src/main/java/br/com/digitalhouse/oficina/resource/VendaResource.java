@@ -22,16 +22,12 @@ public class VendaResource {
 	
 	private VendaService vendaService;
 	
-	
-	
 	public VendaResource(VendaService vendaService) {
 		this.vendaService = vendaService;
 	}
 
-
 	@PostMapping
 	public ResponseEntity<Void> create( @RequestBody Venda venda){
-		
 
 		venda =  this.vendaService.create(venda);
 	
@@ -45,14 +41,10 @@ public class VendaResource {
 		
 	}
 	
-	
 	@GetMapping
 	@SwaggerPageable
 	public ResponseEntity<Page<Venda>> findAll( Pageable pageable){
 		return ResponseEntity.ok(this.vendaService.findAll(pageable));		
 	}
-	
-	
-	
 
 }
